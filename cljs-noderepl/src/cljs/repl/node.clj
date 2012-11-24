@@ -127,3 +127,6 @@
     (load-resource new-repl-env "goog/base.js")
     (load-resource new-repl-env "goog/deps.js")
     new-repl-env))
+
+(defn run-node-repl []
+  (repl/repl (repl-env)))

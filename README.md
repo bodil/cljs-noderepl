@@ -2,15 +2,27 @@
 
 Provides a ClojureScript REPL running on Node.JS.
 
-## Installation
+## Leiningen Plugin
+
+To setup the Leiningen plugin, add this to your `project.clj` or `~/.lein/profiles.clj`:
+
+```clojure
+:plugins [org.bodil/lein-noderepl "0.1.1"]
+```
+
+Then, start the REPL like this:
+
+```bash
+$ lein trampoline noderepl
+```
+
+## In-Project Usage
 
 Add the following dependency to your `project.clj`:
 
 ```clojure
-[org.bodil/cljs-noderepl "0.1.0"]
+[org.bodil/cljs-noderepl "0.1.1"]
 ```
-
-## Usage
 
 To launch the REPL the hard way, run `lein repl` and enter the following:
 
