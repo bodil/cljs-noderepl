@@ -7,7 +7,7 @@ Provides a ClojureScript REPL running on Node.JS.
 To setup the Leiningen plugin, add this to your `project.clj` or `~/.lein/profiles.clj`:
 
 ```clojure
-:plugins [org.bodil/lein-noderepl "0.1.1"]
+:plugins [[org.bodil/lein-noderepl "0.1.1"]]
 ```
 
 Then, start the REPL like this:
