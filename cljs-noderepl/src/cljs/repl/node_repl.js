@@ -731,11 +731,24 @@ var clj = (function () {
 
 var vm = require("vm");
 
-var context = vm.createContext({
-    require: require,
-    process: process,
-    console: console
-});
+var buildContext = function() {
+    var contextProperties = [
+        "require", "process", "console", "Buffer", "setTimeout",
+        "setInterval", "clearTimeout", "clearInterval", "DataView",
+        "ArrayBuffer", "Int8Array", "Uint8Array", "Uint8ClampedArray",
+        "Int16Array", "Uint16Array", "Int32Array", "Uint32Array",
+        "Float32Array", "Float64Array"
+    ];
+    var i, key, context = {};
+    for (i = 0; i < contextProperties.length; i++) {
+        key = contextProperties[i];
+        if (global.hasOwnProperty(key))
+            context[key] = global[key];
+    }
+    return context;
+};
+
+var context = vm.createContext(buildContext());
 var buffer = "";
 
 process.stdout._r_write = process.stdout.write;
