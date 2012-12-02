@@ -31,8 +31,6 @@ To launch the REPL the hard way, run `lein repl` and enter the following:
 (repl/repl (node/repl-env))
 ```
 
-There really ought to be a Leiningen plugin for this in the future.
-
 ## Environment
 
 The REPL is connected to a live Node process running a sandboxed
