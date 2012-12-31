@@ -745,6 +745,7 @@ var buildContext = function() {
         if (global.hasOwnProperty(key))
             context[key] = global[key];
     }
+    context.global = context;
     return context;
 };
 
