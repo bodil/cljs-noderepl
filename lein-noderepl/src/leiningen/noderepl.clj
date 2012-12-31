@@ -29,7 +29,7 @@
 (defn make-subproject [project crossover-path builds]
   (let [subp (cljsbuild-subproject-fixup
               (subproject/make-subproject-lein2 project crossover-path builds))]
-    (deps/add-if-missing subp ['org.bodil/cljs-noderepl "0.1.2"])))
+    (deps/add-if-missing subp ['org.bodil/cljs-noderepl "0.1.3"])))
 
 (defmacro require-trampoline [& forms]
   `(if ltrampoline/*trampoline?*
