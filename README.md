@@ -7,7 +7,7 @@ Provides a ClojureScript REPL running on Node.JS.
 To setup the Leiningen plugin, add this to your `project.clj` or `~/.lein/profiles.clj`:
 
 ```clojure
-:plugins [[org.bodil/lein-noderepl "0.1.2"]]
+:plugins [[org.bodil/lein-noderepl "0.1.4"]]
 ```
 
 Then, start the REPL like this:
@@ -21,7 +21,7 @@ $ lein trampoline noderepl
 Add the following dependency to your `project.clj`:
 
 ```clojure
-[org.bodil/cljs-noderepl "0.1.2"]
+[org.bodil/cljs-noderepl "0.1.4"]
 ```
 
 To launch the REPL the hard way, run `lein repl` and enter the following:
@@ -34,7 +34,7 @@ To launch the REPL the hard way, run `lein repl` and enter the following:
 ## Environment
 
 The REPL is connected to a live Node process running a sandboxed
-environment, which provides the `process` and `require` globals.
+environment, which provides all of Node's available global variables.
 
 As an example, here's the standard Node hello world, in REPL ready
 ClojureScript:
