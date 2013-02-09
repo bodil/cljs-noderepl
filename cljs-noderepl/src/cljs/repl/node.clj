@@ -5,7 +5,8 @@
             [cljs.compiler :as comp]
             [cljs.analyzer :as ana]
             [cljs.repl :as repl]
-            [cljs.repl.server :as server])
+            [cljs.repl.server :as server]
+            [cheshire.core :refer [parse-string generate-string]])
   (:import cljs.repl.IJavaScriptEnv
            java.io.PipedReader
            java.io.PipedWriter))
@@ -34,7 +35,7 @@
     (future
       (while (alive-func)
         (let [line (.readLine reader)
-              data (read-string line)]
+              data (parse-string line)]
           (if-let [output (:output data)]
             (print output)
             (doto pipe
@@ -62,11 +63,11 @@
 
 (defn js-eval [env filename line code]
   (let [{:keys [input output]} env]
-    (.write output (str {:file filename :line line :code code} "\n"))
+    (.write output (str (generate-string {:file filename :line line :code code})
+                        "\n"))
     (.flush output)
-    (let [result-string (.readLine input)
-          result (read-string result-string)]
-      result)))
+    (let [result-string (.readLine input)]
+      (parse-string result-string true))))
 
 (defn node-setup [repl-env]
   (let [env (ana/empty-env)]
