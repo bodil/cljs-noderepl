@@ -2,6 +2,10 @@
 
 Provides a ClojureScript REPL running on Node.JS.
 
+## Requirements
+
+You must have Node version 0.8.x or higher installed.
+
 ## Leiningen Plugin
 
 To setup the Leiningen plugin, add this to your `project.clj` or `~/.lein/profiles.clj`:
