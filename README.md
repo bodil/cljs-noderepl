@@ -49,7 +49,13 @@ ClojureScript:
       server (.createServer http handler)]
   (.listen server 1337))
 ```
+## Readline Support
 
+If you have rlwrap installed, the following provides basic readline and paren matching support:
+
+```bash
+rlwrap -r -m -q '\"' -b "(){}[],^%3@\";:'" lein trampoline noderepl
+```
 ## License
 
 Copyright © 2012 Bodil Stokke.
