@@ -11,7 +11,7 @@ You must have Node version 0.8.x or higher installed.
 To setup the Leiningen plugin, add this to your `project.clj` or `~/.lein/profiles.clj`:
 
 ```clojure
-:plugins [[org.bodil/lein-noderepl "0.1.5"]]
+:plugins [[org.bodil/lein-noderepl "0.1.6"]]
 ```
 
 Then, start the REPL like this:
@@ -25,7 +25,7 @@ $ lein trampoline noderepl
 Add the following dependency to your `project.clj`:
 
 ```clojure
-[org.bodil/cljs-noderepl "0.1.5"]
+[org.bodil/cljs-noderepl "0.1.6"]
 ```
 
 To launch the REPL the hard way, run `lein repl` and enter the following:
