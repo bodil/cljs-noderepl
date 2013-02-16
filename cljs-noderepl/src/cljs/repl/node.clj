@@ -1,17 +1,13 @@
 (ns cljs.repl.node
-  (:refer-clojure :exclude [loaded-libs])
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
-            [cljs.compiler :as comp]
             [cljs.analyzer :as ana]
             [cljs.repl :as repl]
-            [cljs.repl.server :as server]
-            [cheshire.core :refer [parse-string generate-string]])
+            [cheshire.core :refer [parse-string generate-string]]
+            [cemerick.piggieback :as piggieback])
   (:import cljs.repl.IJavaScriptEnv
            java.io.PipedReader
            java.io.PipedWriter))
-
-(def loaded-libs (atom #{}))
 
 (defn- load-as-tempfile
   "Copy a file from the classpath into a temporary file.
@@ -59,7 +55,8 @@
         process (let [pb (ProcessBuilder. ["node" "-e" launch-script])]
                   (.start pb))]
     {:input (output-filter (io/reader (.getInputStream process)) #(process-alive? process))
-     :output (io/writer (.getOutputStream process))}))
+     :output (io/writer (.getOutputStream process))
+     :loaded-libs (atom #{})}))
 
 (defn js-eval [env filename line code]
   (let [{:keys [input output]} env]
@@ -72,7 +69,7 @@
 (defn node-setup [repl-env]
   (let [env (ana/empty-env)]
     (repl/load-file repl-env "cljs/core.cljs")
-    (swap! loaded-libs conj "cljs.core")
+    (swap! (:loaded-libs repl-env) conj "cljs.core")
     (repl/evaluate-form repl-env env "<cljs repl>"
                         '(ns cljs.user))
     (repl/evaluate-form repl-env env "<cljs repl>"
@@ -85,10 +82,10 @@
       {:status :success :value (:result result)})))
 
 (defn load-javascript [repl-env ns url]
-  (let [missing (remove #(contains? @loaded-libs %) ns)]
+  (let [missing (remove #(contains? @(:loaded-libs repl-env) %) ns)]
     (when (seq missing)
       (js-eval repl-env (.toString url) 1 (slurp url))
-      (swap! loaded-libs (partial apply conj) missing))))
+      (swap! (:loaded-libs repl-env) (partial apply conj) missing))))
 
 (defn node-tear-down [repl-env]
   (let [process (:process repl-env)]
@@ -131,3 +128,9 @@
 
 (defn run-node-repl []
   (repl/repl (repl-env)))
+
+(defn nrepl-env []
+  (doto (repl-env) (node-setup)))
+
+(defn run-node-nrepl []
+  (piggieback/cljs-repl :repl-env (nrepl-env)))

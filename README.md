@@ -49,6 +49,7 @@ ClojureScript:
       server (.createServer http handler)]
   (.listen server 1337))
 ```
+
 ## Readline Support
 
 If you have rlwrap installed, the following provides basic readline and paren matching support:
@@ -56,6 +57,40 @@ If you have rlwrap installed, the following provides basic readline and paren ma
 ```bash
 rlwrap -r -m -q '\"' -b "(){}[],^%3@\";:'" lein trampoline noderepl
 ```
+
+## nREPL With Piggieback
+
+You can get cljs-noderepl running on an nREPL server through
+[Piggieback](https://github.com/cemerick/piggieback), though it's a
+bit fiddly. Here's how.
+
+You need to add cljs-noderepl as a project dependency (you'll probably
+want to keep this in the `:dev` profile or something similar) in your
+`project.clj` file:
+
+```clojure
+:dependencies [...
+               [org.bodil/cljs-noderepl "0.1.6"]]
+```
+
+Note that you don't need to add Piggieback itself as an explicit
+dependency, as cljs-noderepl will take care of that.
+
+Then, add the Piggieback nREPL middleware, also in `project.clj`:
+
+```clojure
+:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+```
+
+Now, launch nREPL through Leiningen as usual - `lein repl` - and
+connect to it from wherever you prefer. You'll need to start the
+ClojureScript REPL manually once you have a Clojure REPL prompt:
+
+```clojure
+user=> (require '[cljs.repl.node])
+user=> (node/run-node-nrepl)
+```
+
 ## License
 
 Copyright © 2012 Bodil Stokke.
