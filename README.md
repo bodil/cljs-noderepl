@@ -64,17 +64,15 @@ You can get cljs-noderepl running on an nREPL server through
 [Piggieback](https://github.com/cemerick/piggieback), though it's a
 bit fiddly. Here's how.
 
-You need to add cljs-noderepl as a project dependency (you'll probably
-want to keep this in the `:dev` profile or something similar) in your
-`project.clj` file:
+You need to add Piggieback and cljs-noderepl as project dependencies
+(you'll probably want to keep this in the `:dev` profile or something
+similar) in your `project.clj` file:
 
 ```clojure
 :dependencies [...
-               [org.bodil/cljs-noderepl "0.1.6"]]
+               [org.bodil/cljs-noderepl "0.1.6"]
+               [com.cemerick/piggieback "0.0.2"]]
 ```
-
-Note that you don't need to add Piggieback itself as an explicit
-dependency, as cljs-noderepl will take care of that.
 
 Then, add the Piggieback nREPL middleware, also in `project.clj`:
 
