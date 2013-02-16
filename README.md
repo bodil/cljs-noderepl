@@ -85,7 +85,7 @@ connect to it from wherever you prefer. You'll need to start the
 ClojureScript REPL manually once you have a Clojure REPL prompt:
 
 ```clojure
-user=> (require '[cljs.repl.node])
+user=> (require '[cljs.repl.node :as node])
 user=> (node/run-node-nrepl)
 ```
 
