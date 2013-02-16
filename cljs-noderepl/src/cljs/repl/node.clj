@@ -48,9 +48,9 @@
 (defn- launch-node-process
   "Launch the Node subprocess."
   []
-  ; Launch repl.js through an eval to trick Node into thinking it was
-  ; started from the current directory, allowing require() to work as
-  ; expected.
+  ;; Launch repl.js through an eval to trick Node into thinking it was
+  ;; started from the current directory, allowing require() to work as
+  ;; expected.
   (let [launch-script (str "eval(require(\"fs\").readFileSync(\"" (load-as-tempfile "cljs/repl/node_repl.js") "\",\"utf8\"))")
         process (let [pb (ProcessBuilder. ["node" "-e" launch-script])]
                   (.start pb))]
@@ -132,5 +132,35 @@
 (defn nrepl-env []
   (doto (repl-env) (node-setup)))
 
+(defn- nrepl-quit [env]
+  (node-tear-down env)
+  (set! ana/*cljs-ns* 'cljs.user))
+
+(defn nrepl-eval
+  [repl-env expr {:keys [verbose warn-on-undeclared special-fns]}]
+  (binding [repl/*cljs-verbose* verbose
+            ana/*cljs-warn-on-undeclared* warn-on-undeclared]
+    (let [special-fns (merge repl/default-special-fns special-fns)
+          is-special-fn? (set (keys special-fns))]
+      (cond
+       (= expr :cljs/quit) (do (nrepl-quit repl-env) :cljs/quit)
+
+       (and (seq? expr) (is-special-fn? (first expr)))
+       (apply (get special-fns (first expr)) repl-env (rest expr))
+
+       :default
+       (let [ret (repl/evaluate-form
+                  repl-env
+                  {:context :statement :locals {}
+                   :ns (ana/get-namespace ana/*cljs-ns*)}
+                  "<cljs repl>"
+                  expr
+                  (#'repl/wrap-fn expr))]
+         (try
+           (read-string ret)
+           (catch Exception _
+             (when (string? ret)
+               (println ret)))))))))
+
 (defn run-node-nrepl []
-  (piggieback/cljs-repl :repl-env (nrepl-env)))
+  (piggieback/cljs-repl :repl-env (nrepl-env) :eval nrepl-eval))
