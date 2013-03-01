@@ -32,7 +32,7 @@
       (while (alive-func)
         (let [line (.readLine reader)
               data (parse-string line)]
-          (if-let [output (:output data)]
+          (if-let [output (get data "output")]
             (print output)
             (doto pipe
               (.write (str line "\n"))
