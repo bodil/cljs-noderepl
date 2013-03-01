@@ -6,4 +6,4 @@
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/clojurescript "0.0-1576"]
                  [cheshire "5.0.1"]
-                 [com.cemerick/piggieback "0.0.2"]])
+                 [com.cemerick/piggieback "0.0.4"]])
