@@ -51,7 +51,10 @@
   ;; Launch repl.js through an eval to trick Node into thinking it was
   ;; started from the current directory, allowing require() to work as
   ;; expected.
-  (let [launch-script (str "eval(require(\"fs\").readFileSync(\"" (load-as-tempfile "cljs/repl/node_repl.js") "\",\"utf8\"))")
+  (let [launch-script
+        (str "eval(require('fs').readFileSync('"
+             (string/replace (load-as-tempfile "cljs/repl/node_repl.js") "\\" "/")
+             "','utf8'))")
         process (let [pb (ProcessBuilder. ["node" "-e" launch-script])]
                   (.start pb))]
     {:input (output-filter (io/reader (.getInputStream process)) #(process-alive? process))
