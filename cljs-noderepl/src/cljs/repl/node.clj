@@ -57,7 +57,8 @@
              "','utf8'))")
         process (let [pb (ProcessBuilder. ["node" "-e" launch-script])]
                   (.start pb))]
-    {:input (output-filter (io/reader (.getInputStream process)) #(process-alive? process))
+    {:process process
+     :input (output-filter (io/reader (.getInputStream process)) #(process-alive? process))
      :output (io/writer (.getOutputStream process))
      :loaded-libs (atom #{})}))
 
