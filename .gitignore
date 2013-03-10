@@ -8,3 +8,6 @@ pom.xml
 .lein-deps-sum
 .lein-failures
 .lein-plugins
+/.lein-repl-history
+/cljs-noderepl/.lein-repl-history
+/pom.xml.asc
