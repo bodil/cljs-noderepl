@@ -33,7 +33,7 @@
         (let [line (.readLine reader)
               data (parse-string line)]
           (if-let [output (get data "output")]
-            (print output)
+            (do (print output) (flush))
             (doto pipe
               (.write (str line "\n"))
               (.flush))))))
