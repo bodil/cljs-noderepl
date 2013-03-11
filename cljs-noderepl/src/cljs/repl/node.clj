@@ -26,14 +26,15 @@
   "Take a reader and wrap a filter around it which swallows and
   acts on output events from the subprocess. Keep the filter
   thread running until alive-func returns false."
-  [reader alive-func]
+  [reader alive-func & [out-func]]
   (let [pipe (PipedWriter.)]
     (future
       (while (alive-func)
         (let [line (.readLine reader)
               data (parse-string line)]
           (if-let [output (get data "output")]
-            (do (print output) (flush))
+            (if out-func (out-func output)
+                (do (print output) (flush)))
             (doto pipe
               (.write (str line "\n"))
               (.flush))))))
@@ -47,7 +48,7 @@
 
 (defn- launch-node-process
   "Launch the Node subprocess."
-  []
+  [& [output-func]]
   ;; Launch repl.js through an eval to trick Node into thinking it was
   ;; started from the current directory, allowing require() to work as
   ;; expected.
@@ -58,7 +59,9 @@
         process (let [pb (ProcessBuilder. ["node" "-e" launch-script])]
                   (.start pb))]
     {:process process
-     :input (output-filter (io/reader (.getInputStream process)) #(process-alive? process))
+     :input (output-filter (io/reader (.getInputStream process))
+                           #(process-alive? process)
+                           output-func)
      :output (io/writer (.getOutputStream process))
      :loaded-libs (atom #{})}))
 
@@ -120,7 +123,7 @@
   [& {:as opts}]
   (let [base (io/resource "goog/base.js")
         deps (io/resource "goog/deps.js")
-        process (launch-node-process)
+        process (launch-node-process (:output opts))
         new-repl-env (merge (NodeEnv.)
                             (merge process
                                    {:optimizations :simple}))]
