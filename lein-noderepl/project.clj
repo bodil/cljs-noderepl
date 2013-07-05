@@ -1,4 +1,4 @@
-(defproject org.bodil/lein-noderepl "0.1.9"
+(defproject org.bodil/lein-noderepl "0.1.10"
   :description "Leiningen plugin for launching a Node.js CLJS REPL"
   :url "https://github.com/bodil/cljs-noderepl"
   :license {:name "Eclipse Public License"
