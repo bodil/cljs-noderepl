@@ -135,9 +135,6 @@
 
 (defn run-node-repl []
   (repl/repl (repl-env)))
-
-(defn nrepl-env []
-  (doto (repl-env) (node-setup)))
-
+                                        
 (defn run-node-nrepl []
-  (piggieback/cljs-repl :repl-env (nrepl-env)))
+  (piggieback/cljs-repl :repl-env (repl-env)))
