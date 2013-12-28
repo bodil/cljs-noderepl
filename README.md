@@ -12,7 +12,7 @@ To setup the Leiningen plugin, add this to your `project.clj` or
 `~/.lein/profiles.clj`:
 
 ```clojure
-:plugins [[org.bodil/lein-noderepl "0.1.11"]]
+:plugins [[org.bodil/lein-noderepl "0.1.10"]]
 ```
 
 Then, start the REPL like this:
@@ -26,7 +26,7 @@ $ lein trampoline noderepl
 Add the following dependency to your `project.clj`:
 
 ```clojure
-[org.bodil/cljs-noderepl "0.1.11"]
+[org.bodil/cljs-noderepl "0.1.10"]
 ```
 
 To launch the REPL the hard way, run `lein repl` and enter the following:
@@ -69,7 +69,7 @@ Add the cljs-noderepl dependency to your `project.clj` (it will bring
 in Piggieback transitively):
 
 ```clojure
-[org.bodil/cljs-noderepl "0.1.11"]
+[org.bodil/cljs-noderepl "0.1.10"]
 ```
 
 You may want to add this dependency to your `:dev` profile so it's not

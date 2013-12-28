@@ -1,4 +1,4 @@
-(defproject org.bodil/cljs-noderepl-root "0.1.11"
+(defproject org.bodil/cljs-noderepl-root "0.1.11-SNAPSHOT"
   :description "Node.js REPL environment for Clojurescript"
   :url "https://github.com/bodil/cljs-noderepl"
   :license {:name "Eclipse Public License"
