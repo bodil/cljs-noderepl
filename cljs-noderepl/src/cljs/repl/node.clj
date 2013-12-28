@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [cljs.analyzer :as ana]
             [cljs.repl :as repl]
+            [cljs.env :as env]
             [cheshire.core :refer [parse-string generate-string]]
             [cemerick.piggieback :as piggieback])
   (:import cljs.repl.IJavaScriptEnv
@@ -75,12 +76,13 @@
 
 (defn node-setup [repl-env]
   (let [env (ana/empty-env)]
-    (repl/load-file repl-env "cljs/core.cljs")
-    (swap! (:loaded-libs repl-env) conj "cljs.core")
-    (repl/evaluate-form repl-env env "<cljs repl>"
-                        '(ns cljs.user))
-    (repl/evaluate-form repl-env env "<cljs repl>"
-                        '(set! cljs.core/*print-fn* (.-print (js/require "util"))))))
+    (env/with-compiler-env (or (::env/compiler repl-env) (env/default-compiler-env))
+      (repl/load-file repl-env "cljs/core.cljs")
+      (swap! (:loaded-libs repl-env) conj "cljs.core")
+      (repl/evaluate-form repl-env env "<cljs repl>"
+                          '(ns cljs.user))
+      (repl/evaluate-form repl-env env "<cljs repl>"
+                          '(set! cljs.core/*print-fn* (.-print (js/require "util")))))))
 
 (defn node-eval [repl-env filename line js]
   (let [result (js-eval repl-env filename line js)]
@@ -131,10 +133,13 @@
     (assert deps "Can't find goog/deps.js in classpath")
     (load-resource new-repl-env "goog/base.js")
     (load-resource new-repl-env "goog/deps.js")
-    new-repl-env))
+    (assoc new-repl-env ::env/compiler (env/default-compiler-env))))
 
 (defn run-node-repl []
   (repl/repl (repl-env)))
-                                        
+
+(defn nrepl-env []
+  (doto (repl-env) (node-setup)))
+
 (defn run-node-nrepl []
-  (piggieback/cljs-repl :repl-env (repl-env)))
+  (piggieback/cljs-repl :repl-env (nrepl-env)))
