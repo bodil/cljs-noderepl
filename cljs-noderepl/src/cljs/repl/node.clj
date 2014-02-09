@@ -49,7 +49,7 @@
 
 (defn- launch-node-process
   "Launch the Node subprocess."
-  [& [output-func]]
+  [& [node-command output-func]]
   ;; Launch repl.js through an eval to trick Node into thinking it was
   ;; started from the current directory, allowing require() to work as
   ;; expected.
@@ -57,7 +57,7 @@
         (str "eval(require('fs').readFileSync('"
              (string/replace (load-as-tempfile "cljs/repl/node_repl.js") "\\" "/")
              "','utf8'))")
-        process (let [pb (ProcessBuilder. ["node" "-e" launch-script])]
+        process (let [pb (ProcessBuilder. [(or node-command "node") "-e" launch-script])]
                   (.start pb))]
     {:process process
      :input (output-filter (io/reader (.getInputStream process))
@@ -125,7 +125,7 @@
   [& {:as opts}]
   (let [base (io/resource "goog/base.js")
         deps (io/resource "goog/deps.js")
-        process (launch-node-process (:output opts))
+        process (launch-node-process (:node-command opts) (:output opts))
         new-repl-env (merge (NodeEnv.)
                             (merge process
                                    {:optimizations :simple}))]
