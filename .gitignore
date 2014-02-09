@@ -11,3 +11,4 @@ pom.xml
 /.lein-repl-history
 /cljs-noderepl/.lein-repl-history
 /pom.xml.asc
+/cljs-noderepl/src/cljs/repl/.tern-port
