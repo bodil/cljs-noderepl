@@ -47,6 +47,15 @@ var pop = function() {
   return l;
 };
 
+var to_str = function (x)
+{
+  try {
+    return ((void 0 !== x) && x.toString) ? x.toString () : x;
+  } catch (e) {
+    return "";
+  }
+}
+
 process.stdin.on("data", function(sexp) {
   var result, data;
 
@@ -66,7 +75,7 @@ process.stdin.on("data", function(sexp) {
       continue;
     }
     try {
-      result = { result: vm.runInContext(data.code, context, data.file) };
+      result = { result: to_str (vm.runInContext(data.code, context, data.file)) };
     } catch (e) {
       result = { error: { name: e.name, message: e.message, stack: e.stack } };
     }
