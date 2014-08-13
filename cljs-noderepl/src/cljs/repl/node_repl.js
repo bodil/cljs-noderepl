@@ -4,11 +4,10 @@ var vm = require("vm");
 
 var buildContext = function() {
   var contextProperties = [
-    "Array", "ArrayBuffer", "Boolean", "Buffer", "DataView", "Date", "Error",
-    "EvalError", "Float32Array", "Float64Array", "Function", "Infinity",
-    "Int16Array", "Int32Array", "Int8Array", "NaN", "Number", "Object",
-    "RangeError", "ReferenceError", "RegExp", "String", "SyntaxError",
-    "TypeError", "URIError", "Uint16Array", "Uint32Array", "Uint8Array",
+    "ArrayBuffer", "Buffer", "DataView",
+    "Float32Array", "Float64Array",  "Infinity",
+    "Int16Array", "Int32Array", "Int8Array", "NaN",
+    "Uint16Array", "Uint32Array", "Uint8Array",
     "Uint8ClampedArray", "clearInterval", "clearTimeout", "console", "process",
     "require", "setInterval", "setTimeout"
   ];
