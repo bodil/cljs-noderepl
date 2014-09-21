@@ -4,11 +4,10 @@ var vm = require("vm");
 
 var buildContext = function() {
   var contextProperties = [
-    "Array", "ArrayBuffer", "Boolean", "Buffer", "DataView", "Date", "Error",
-    "EvalError", "Float32Array", "Float64Array", "Function", "Infinity",
-    "Int16Array", "Int32Array", "Int8Array", "NaN", "Number", "Object",
-    "RangeError", "ReferenceError", "RegExp", "String", "SyntaxError",
-    "TypeError", "URIError", "Uint16Array", "Uint32Array", "Uint8Array",
+    "ArrayBuffer", "Buffer", "DataView",
+    "Float32Array", "Float64Array",  "Infinity",
+    "Int16Array", "Int32Array", "Int8Array", "NaN",
+    "Uint16Array", "Uint32Array", "Uint8Array",
     "Uint8ClampedArray", "clearInterval", "clearTimeout", "console", "process",
     "require", "setInterval", "setTimeout"
   ];
@@ -48,6 +47,15 @@ var pop = function() {
   return l;
 };
 
+var to_str = function (x)
+{
+  try {
+    return ((void 0 !== x) && x.toString) ? x.toString () : x;
+  } catch (e) {
+    return "";
+  }
+}
+
 process.stdin.on("data", function(sexp) {
   var result, data;
 
@@ -67,7 +75,7 @@ process.stdin.on("data", function(sexp) {
       continue;
     }
     try {
-      result = { result: vm.runInContext(data.code, context, data.file) };
+      result = { result: to_str (vm.runInContext(data.code, context, data.file)) };
     } catch (e) {
       result = { error: { name: e.name, message: e.message, stack: e.stack } };
     }

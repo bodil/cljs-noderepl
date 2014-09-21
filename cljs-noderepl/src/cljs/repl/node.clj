@@ -126,14 +126,18 @@
   (let [base (io/resource "goog/base.js")
         deps (io/resource "goog/deps.js")
         process (launch-node-process (:node-command opts) (:output opts))
-        new-repl-env (merge (NodeEnv.)
-                            (merge process
-                                   {:optimizations :simple}))]
+        compiler (env/default-compiler-env (merge {:target :nodejs}
+                                                  (dissoc opts :node-command :output)))
+        new-repl-env (merge (NodeEnv.) process
+                            {:optimizations :simple,
+                             ::env/compiler compiler})]
+    ;; workaround: build makes a copy of target, but repl does not call it
+    (swap! compiler assoc :target :nodejs)
     (assert base "Can't find goog/base.js in classpath")
     (assert deps "Can't find goog/deps.js in classpath")
     (load-resource new-repl-env "goog/base.js")
     (load-resource new-repl-env "goog/deps.js")
-    (assoc new-repl-env ::env/compiler (env/default-compiler-env))))
+    new-repl-env))
 
 (defn run-node-repl []
   (repl/repl (repl-env)))
